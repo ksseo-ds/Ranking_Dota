@@ -79,18 +79,23 @@ class Requisicao:
     def atualizar_tier(listadeamigos:list[dict]) -> list[dict]:
         contador = 0
 
-        for amigo in listadeamigos:
+        for i,amigo in enumerate(listadeamigos):
             if amigo.get('profilestate') == 1 : # verifica se perfil é público
                 try:
                     contador += 1 # Serve apenas para verificar o progresso
                     tier = Requisicao.requisita_open_dota(amigo['steamid']) # solicita o Tier do Open_dota
                     print(f"Atualizando Tier {contador} / {len(listadeamigos)} {amigo['personaname']}") # barra de progresso
-                    amigo.update({'tier':tier})
+
+                    listadeamigos[i] = {
+                        'steamid' :amigo['steamid'],
+                        'tier':tier
+                    }
                 
                     sleep(1)
                     ...
                 except: pass
             else : pass
+        
         
         return listadeamigos
 

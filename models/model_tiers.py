@@ -1,6 +1,6 @@
 from peewee import *
 from .db import db_dota 
-
+from .model_jogadores import Jogadores
 #from . import model_jogadores, model_sessao
 
 
@@ -33,11 +33,11 @@ class Tiers(Banco):
                 (33, 'Cruzado', 3),
                 (34, 'Cruzado', 4),
                 (35, 'Cruzado', 5),
-                (41, 'Arquimago', 1),
-                (42, 'Arquimago', 2),
-                (43, 'Arquimago', 3),
-                (44, 'Arquimago', 4),
-                (45, 'Arquimago', 5),
+                (41, 'Arconte', 1),
+                (42, 'Arconte', 2),
+                (43, 'Arconte', 3),
+                (44, 'Arconte', 4),
+                (45, 'Arconte', 5),
                 (51, 'Lenda', 1),
                 (52, 'Lenda', 2),
                 (53, 'Lenda', 3),
@@ -71,11 +71,23 @@ class Tiers(Banco):
 
 
 class Hitorico_Tiers(Banco):
+    tier = ForeignKeyField(Tiers, backref='tier')
+    steamid = ForeignKeyField(Jogadores, backref= 'jogadores', to_field='steam_id')
 
     class Meta:
         table_name = "historico_tiers"
+    
 
+    @staticmethod
+    def incluir_tier_bd(jogador:dict) -> None:
 
+        if jogador['tier'] != None:
+
+            Hitorico_Tiers.create(
+                tier = jogador['tier'],
+                steamid = jogador['steamid']
+            )
+        else: pass
 
 
 if __name__ == "__main__":
@@ -85,3 +97,6 @@ if __name__ == "__main__":
     db_dota.create_tables([Tiers], safe = True)
 
     Tiers.popular_tabela_tiers()
+
+
+    db_dota.close()

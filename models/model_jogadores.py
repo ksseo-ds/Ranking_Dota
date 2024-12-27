@@ -45,7 +45,7 @@ class Jogadores(Banco):
             avatar=avatar
             ).where(Jogadores.steam_id == steam_id).execute()
                 
-
+    #ainda não implementado
     @staticmethod
     def verifica_jogador_novo(jogador) -> bool:
         '''
