@@ -1,5 +1,5 @@
 from peewee import *
-from db import db_dota 
+from models.db import db_dota 
 from datetime import datetime
 
 
@@ -14,12 +14,11 @@ class Sessao(Banco):
         table_name = "sessao"
 
 
-    @staticmethod
     def gerar_nova_sessao() -> int:
-        
+        db_dota.connect()
         data = datetime.now()
         sessao = Sessao.create(date = data)
-
+        db_dota.close()
         return sessao
 
 if __name__ == "__main__":

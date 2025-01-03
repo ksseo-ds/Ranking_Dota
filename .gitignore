@@ -169,3 +169,4 @@ cython_debug/
 lembretes.txt
 .env
 criar_tabela_tier.sql
+test.py

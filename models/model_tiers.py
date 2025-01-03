@@ -1,7 +1,6 @@
 from peewee import *
-from .db import db_dota 
-from .model_jogadores import Jogadores
-#from . import model_jogadores, model_sessao
+from models.db import db_dota 
+
 
 
 
@@ -17,7 +16,14 @@ class Tiers(Banco):
     class Meta:
         table_name = "tiers"
 
-    def popular_tabela_tiers():
+
+    @classmethod
+    def popular_tabela_tiers(cls):
+
+        if db_dota.is_closed():
+            db_dota.connect()
+            print('Models/tiers conectando no BD')
+
         lista =[(11, 'Arauto', 1), 
                 (12, 'Arauto', 2),
                 (13, 'Arauto', 3),
@@ -57,46 +63,41 @@ class Tiers(Banco):
 
         for tupla in lista:
             try:
-                Tiers.create(
-                    tier = tupla[0],
-                    tier_name = tupla[1],
-                    tier_star = tupla[2]
+                # Tenta atualizar se o registro já existir
+                rows_updated = (
+                    Tiers.update(
+                        tier_name=tupla[1],
+                        tier_star=tupla[2]
                     )
-            except IntegrityError:
-                Tiers.update(
-                    tier = tupla[0],
-                    tier_name = tupla[1],
-                    tier_star = tupla[2]
+                    .where(Tiers.tier == tupla[0])
+                    .execute()
+                )
+                if rows_updated == 0:  # Se nenhum registro foi atualizado, insere um novo
+                    Tiers.create(
+                        tier=tupla[0],
+                        tier_name=tupla[1],
+                        tier_star=tupla[2]
                     )
+                    print(f'Criado: {tupla}')
+                else:
+                    print(f'Atualizado: {tupla}')
 
+            except Exception as e:
+                print(f'Erro ao processar {tupla}: {e}')
 
-class Hitorico_Tiers(Banco):
-    tier = ForeignKeyField(Tiers, backref='tier')
-    steamid = ForeignKeyField(Jogadores, backref= 'jogadores', to_field='steam_id')
-
-    class Meta:
-        table_name = "historico_tiers"
-    
-
-    @staticmethod
-    def incluir_tier_bd(jogador:dict) -> None:
-
-        if jogador['tier'] != None:
-
-            Hitorico_Tiers.create(
-                tier = jogador['tier'],
-                steamid = jogador['steamid']
-            )
-        else: pass
+        if not db_dota.is_closed():
+            db_dota.close()
+            print('Models/tiers desconectando do bd')
 
 
 if __name__ == "__main__":
     print('ok')
 
-    db_dota.connect()
-    db_dota.create_tables([Tiers], safe = True)
+ 
 
+    db_dota.create_tables([Tiers], safe = True)
     Tiers.popular_tabela_tiers()
 
+  
 
-    db_dota.close()
+    
