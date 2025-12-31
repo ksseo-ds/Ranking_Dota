@@ -5,6 +5,8 @@ from models.model_jogadores import Jogadores
 from models.model_tiers import Hitorico_Tiers,Tiers
 from models.db import db_dota
 
+os.getenv('venv/bin/activate')
+
 load_dotenv()
 #steamKey = os.getenv('API_STEAM')
 #inicializando o Menu e atribuindo o id_steam do Ranking

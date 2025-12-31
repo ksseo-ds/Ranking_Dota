@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-
+import os
 from models.db import db_dota
 from models.model_jogadores import Jogadores
 from models.model_tiers import Tiers
@@ -9,11 +9,11 @@ from services.jogador_service import construir_jogador
 from services.steam_api_service import SteamApiService 
 
 
+os.getenv('venv/bin/activate.chs')
 
 db_dota.create_tables([Jogadores, Sessao, Tiers, Historico_tier])
+
 Tiers.popular_tabela_tiers()
-
-
 
 sessao = Sessao.gerar_nova_sessao()
 
