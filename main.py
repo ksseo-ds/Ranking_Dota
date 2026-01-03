@@ -1,41 +1,47 @@
 from dotenv import load_dotenv
-from front.front import *
-from services.steam_api import Requisicao
-from models.model_jogadores import Jogadores
-from models.model_tiers import Hitorico_Tiers,Tiers
+import os
 from models.db import db_dota
-
-os.getenv('venv/bin/activate')
-
-load_dotenv()
-#steamKey = os.getenv('API_STEAM')
-#inicializando o Menu e atribuindo o id_steam do Ranking
-menu = Menu()
-id_ranking = menu.menu_inicial()
-
-db_dota.connect()
-db_dota.create_tables([Jogadores, Tiers, Hitorico_Tiers], safe = True)
-
-#inicializando a lista de amigos da api_steam
-lista_amigos = Requisicao()
-lista_amigos = lista_amigos.atualizar_lista_amigos(id_ranking=id_ranking)
-
-# Requisitando o Tier da lista dos amigos do ranking
-lista_tier = Requisicao.atualizar_tier(lista_amigos) # lembrar de tirar a restrição 6 amigos no steam_api.pi linha 36
-for i in lista_tier:
-    Hitorico_Tiers.incluir_tier_bd(i)
-# a variável lista_amigos, é uma lista que contem dicionários, e cada dicionário é um jogador
+from models.model_jogadores import Jogadores
+from models.model_tiers import Tiers
+from models.model_sessao import Sessao
+from models.model_historico_tiers import Historico_tier
+from services.jogador_service import construir_jogador
+from services.steam_api_service import SteamApiService 
 
 
 
-### Começa a inclusão no BD
+db_dota.create_tables([Jogadores, Sessao, Tiers, Historico_tier])
+
+Tiers.popular_tabela_tiers()
+
+sessao = Sessao.gerar_nova_sessao()
+
+ranking = '76561198266319437'
+
+lista_de_jogadores = SteamApiService().listar_amigos_raw(id_ranking=ranking)['amigos']
 
 
 
-Jogadores.adicionar_ao_bd(lista_amigos)
+for id_jogador in lista_de_jogadores:
+    jogador = construir_jogador(steam_id = id_jogador)
+    jogador['dados']['sessao'] = sessao
 
-db_dota.close()
+    steam_id = jogador['dados']['steamid']
+    personaname = jogador['dados']['personaname']
+    profilestate = jogador['dados']['communityvisibilitystate']
+    avatar = jogador['dados']['avatarfull']
+    tier = jogador['dados']['tier']
+
+    print(jogador['dados'])
+
+    Jogadores.adicionar_jogador(steam_id=steam_id,
+                                personaname=personaname,
+                                profilestate=profilestate,
+                                avatar=avatar
+                                )
+    print('atualizado')
+    
+    Historico_tier.incluir_tier_bd(jogador=jogador['dados'])
 
 
 
-###
