@@ -23,3 +23,9 @@ req = requests.get(url=url, params=params)
 
 response = req.json()
 response
+'''
+Still a test to populate the bd.
+
+This part will be in some service to futhermore we can calculate probalilities of wins, or to mount teams within the players.
+
+'''
