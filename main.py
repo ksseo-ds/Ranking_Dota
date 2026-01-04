@@ -4,6 +4,7 @@ from models.model_jogadores import Jogadores
 from models.model_tiers import Tiers
 from models.model_sessao import Sessao
 from models.model_historico_tiers import Historico_tier
+from models.model_open_dota_billing import Open_dota_billing
 from services.jogador_service import construir_jogador
 from services.steam_api_service import SteamApiService 
 
@@ -34,7 +35,7 @@ for id_jogador in lista_de_jogadores:
     profilestate = jogador['dados']['communityvisibilitystate']
     avatar = jogador['dados']['avatarfull']
     tier = jogador['dados']['tier']
-
+    open_dota_billing = jogador['billing'] #  Crud para Billing
     print(jogador['dados'])
 
     #CRUD player 
@@ -47,5 +48,13 @@ for id_jogador in lista_de_jogadores:
     #CRUD Tier of the player
     Historico_tier.incluir_tier_bd(jogador=jogador['dados'])
 
+    #CRUD Billing
+    Open_dota_billing.open_dota_bill(session_id=sessao,requisition_billing=open_dota_billing)
+
+    
+'''
+todo:
+[] Verificação se um jogador já foi atualizado hoje antes de fazer o Crud
 
 
+'''

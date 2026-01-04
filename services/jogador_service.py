@@ -25,10 +25,11 @@ def construir_jogador(steam_id: str) -> Dict:
     
     else:
         tier = {'tier': None,
-                'performance_open_dota': 0 }
+                'performance_open_dota': 0,
+                 'billing_open_dota':0 }
     # inclui o tier dentro do dict de dados do jogador
     jogador['dados']['tier'] = tier['tier']
-
+    jogador['billing'] = tier['billing_open_dota']
     #soma as performances da API
     jogador['performance'] = jogador.pop('performance_steam')
     jogador['performance'] += tier['performance_open_dota']

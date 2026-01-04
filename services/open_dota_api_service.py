@@ -30,11 +30,12 @@ class OpenDotaService:
     def solicita_tier(self, user_id: str) -> Dict:
 
         '''
-        Recebe um steamid, e retorna o tier desse usuário, junto com a performance da solicitação da api
+        Recebe um steamid, e retorna o tier desse usuário, junto com a performance da solicitação da api, e o billing que vai para o Banco de dados para apuraão de custos e de ratelimit diario
 
         retorno = {
             'tier': int,
             'performance_open_dota': float
+            'billing_open_dota' : int
             }
         '''
 
@@ -42,14 +43,22 @@ class OpenDotaService:
         account_id = OpenDotaService().steam32_to_steam64(user_id)
 
         start_api_call = perf_counter()
-        req = requests.get(f'https://api.opendota.com/api/players/{account_id}').json()
+        requisicao = requests.get(f'https://api.opendota.com/api/players/{account_id}') 
+        req = requisicao.json()
 
         end_api_call = perf_counter()
         performance = round((end_api_call - start_api_call),2)
+        tier = req.get('rank_tier')
+
+        if requisicao.status_code not in (500,429,404 ) :
+            billing_open_dota = 1
+        else:
+            billing_open_dota = 0
 
         
-        retorno = {'tier':req.get('rank_tier'),
-                   'performance_open_dota': performance
+        retorno = {'tier':tier,
+                   'performance_open_dota': performance,
+                   'billing_open_dota' : billing_open_dota
         }
 
 
