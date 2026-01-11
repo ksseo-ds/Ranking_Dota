@@ -1,7 +1,7 @@
 from peewee import ForeignKeyField
 from models.db import DbDota,db_dota
-from models.model_jogadores import Player
-from models.model_sessao import Sessao
+from models.model_player import Player
+from models.model_session import Sessao
 from models.model_tiers import Tiers
 
 
@@ -14,7 +14,7 @@ class TierHistory(DbDota):
         table_name = 'historico_tier'
 
 
-    def incluir_tier_bd(jogador:dict) -> None:
+    def create_update_tier_db(jogador:dict) -> None:
 
         if db_dota.is_closed():
             db_dota.connect()

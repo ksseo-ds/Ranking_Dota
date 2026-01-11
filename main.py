@@ -46,7 +46,7 @@ for id_jogador in lista_de_jogadores:
                                 )
     print('atualizado')
     #CRUD Tier of the player
-    TierHistory.incluir_tier_bd(jogador=jogador['dados'])
+    TierHistory.create_update_tier_db(jogador=jogador['dados'])
 
     #CRUD Billing
     OpenDotaBilling.open_dota_bill(session_id=sessao,requisition_billing=open_dota_billing)
