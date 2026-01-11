@@ -1,5 +1,5 @@
 from peewee import Model, DateTimeField
-from models.db import DbDota, db_dota 
+from db import DbDota, db_dota 
 from datetime import datetime
 
 

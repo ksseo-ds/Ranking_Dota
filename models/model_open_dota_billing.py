@@ -1,6 +1,6 @@
 from peewee import Model, IntegerField,ForeignKeyField
 from models.model_session import Sessao
-from models.db import DbDota, db_dota
+from db import DbDota, db_dota
 
 
 class OpenDotaBilling(DbDota):

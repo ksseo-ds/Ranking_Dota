@@ -1,5 +1,5 @@
 from peewee import Model, SmallIntegerField, CharField
-from models.db import DbDota, db_dota 
+from db import DbDota, db_dota 
 
 
 class Tiers(DbDota):

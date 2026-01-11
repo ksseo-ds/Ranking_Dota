@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from models.db import db_dota
+from db import db_dota
 from models.model_player import Player
 from models.model_tiers import Tiers
 from models.model_session import Sessao

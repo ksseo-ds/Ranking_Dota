@@ -1,5 +1,5 @@
 from peewee import CharField, SmallIntegerField, IntegrityError
-from models.db import DbDota, db_dota 
+from db import DbDota, db_dota 
 
 
 class Player(DbDota):

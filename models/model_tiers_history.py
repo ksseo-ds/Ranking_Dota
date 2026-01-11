@@ -1,5 +1,5 @@
 from peewee import ForeignKeyField
-from models.db import DbDota,db_dota
+from db import DbDota,db_dota
 from models.model_player import Player
 from models.model_session import Sessao
 from models.model_tiers import Tiers
