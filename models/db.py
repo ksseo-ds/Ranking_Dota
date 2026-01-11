@@ -1,5 +1,5 @@
 import os
-from peewee import PostgresqlDatabase
+from peewee import Model, PostgresqlDatabase
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,8 +11,12 @@ db_host = os.getenv("DB_HOST")
 db_port = os.getenv("DB_PORT") 
 
 
-db_dota = PostgresqlDatabase(db_name,
+db_data = PostgresqlDatabase(db_name,
                             user = db_user, 
                             password = db_pass,
                             host=db_host,
                             port=db_port )
+
+class Db_dota(Model):
+    class Meta:
+        database = db_data
