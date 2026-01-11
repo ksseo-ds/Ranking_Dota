@@ -1,9 +1,9 @@
 import os
-from typing import Dict, List, Any
+from typing import Dict
 import requests
 from dotenv import load_dotenv
-from time import sleep, perf_counter
-#carregando as váriaveis de sistema (chaves de api)
+from time import perf_counter
+#load Env Variables (API KEY)
 load_dotenv()
 
 class OpenDotaService:
@@ -16,23 +16,23 @@ class OpenDotaService:
 
     def steam32_to_steam64(self, steam_id: str) -> str:
         '''
-        recebe uma string que seria o steamid de um usuário, para retornar uma string que seria o user_id requerido pela api do open_dota para que faça as demais buscas
+        This function receives a string that represents a user's steamid, and returns a string that represents the user_id required by the Open_Dota API for subsequent searches.
 
-        essa função é usada apenas nas funções para chamada de api do open_dota, e não necessita de uso fora desse escopo
+        This function is only used in functions that call the Open_Dota API and is not needed outside of that scope.
         
         '''
 
-        valor_offset = 76561197960265728
+        offset_value = 76561197960265728
 
-        return str(int(steam_id) - valor_offset)
+        return str(int(steam_id) - offset_value)
     
 
-    def solicita_tier(self, user_id: str) -> Dict:
+    def tier_request(self, user_id: str) -> Dict:
 
         '''
-        Recebe um steamid, e retorna o tier desse usuário, junto com a performance da solicitação da api, e o billing que vai para o Banco de dados para apuraão de custos e de ratelimit diario
+        It receives a Steam ID and returns that user's tier, along with the API request performance and the billing information that goes to the database for cost calculation and daily rate limit.
 
-        retorno = {
+        return = {
             'tier': int,
             'performance_open_dota': float
             'billing_open_dota' : int
@@ -56,20 +56,20 @@ class OpenDotaService:
             billing_open_dota = 0
 
         
-        retorno = {'tier':tier,
+        req_return = {'tier':tier,
                    'performance_open_dota': performance,
                    'billing_open_dota' : billing_open_dota
         }
 
 
-        return retorno 
+        return req_return 
     
     
 
 if __name__ == '__main__':
+    ranking_id = os.getenv('RANKING_STEAM')
+    ranking = ranking_id
 
-    ranking ="76561198266319437"
-
-    tier = OpenDotaService().solicita_tier(user_id=ranking)
+    tier = OpenDotaService().tier_request(user_id=ranking)
 
     print(tier)

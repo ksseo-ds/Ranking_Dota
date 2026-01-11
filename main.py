@@ -6,7 +6,7 @@ from models.model_tiers import Tiers
 from models.model_session import Sessao
 from models.model_tiers_history import TierHistory
 from models.model_open_dota_billing import OpenDotaBilling
-from services.jogador_service import construir_jogador
+from services.jogador_service import build_player
 from services.steam_api_service import SteamApiService 
 
 load_dotenv()
@@ -22,12 +22,12 @@ sessao = Sessao.gerar_nova_sessao()
 #the steam_id of the target to rank its friends
 ranking = os.getenv('RANKING_STEAM') 
 # creating the friends list of the target 
-lista_de_jogadores = SteamApiService().listar_amigos_raw(id_ranking=ranking)['amigos']
+lista_de_jogadores = SteamApiService().raw_friend_list(id_ranking=ranking)['amigos']
 
 
 #constructing the player and inserting in the BD
 for id_jogador in lista_de_jogadores:
-    jogador = construir_jogador(steam_id = id_jogador)
+    jogador = build_player(steam_id = id_jogador)
     jogador['dados']['sessao'] = sessao
 
     steam_id = jogador['dados']['steamid']

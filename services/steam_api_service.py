@@ -1,11 +1,11 @@
 import os
-from typing import Dict, List, Any
+from typing import Dict 
 import requests
 from dotenv import load_dotenv
-from time import sleep, perf_counter
+from time import perf_counter
 
 
-#carregando as váriaveis de sistema (chaves de api)
+#loading ENV variables
 load_dotenv()
 
 class SteamApiService:
@@ -16,42 +16,44 @@ class SteamApiService:
         self.steam_key = STEAMKEY
 
        
-    def listar_amigos_raw(self, id_ranking: str) -> Dict:
+    def raw_friend_list(self, id_ranking: str) -> Dict:
         '''
-        Recebe o id_ranking como string, retorna um dicionáro com a lista de amigos dessa conta, e a informação de performance.
-
-        exemplo de retorno:
-            retorno = {
+        It receives the id_ranking as a string, returns a dictionary with the list of friends for that account, and performance information.
+        
+        return example:
+            return = {
                 'amigos': [str], 
                 'performance_steam': foat
                 }
                 
-        
+        'amigos' => friends 
+
+                
         '''
         start_api_call = perf_counter()
 
-        dic_amigos = requests.get(f"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.steam_key}&steamid={id_ranking}&relationship=friend").json()
+        friends_dict = requests.get(f"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.steam_key}&steamid={id_ranking}&relationship=friend").json()
 
         end_api_call = perf_counter()
 
 
-        #criando a lista de amigos a partir do dicionario da chamada de API o retorno é uma lista de steamid
+        #Creating the friends list from the API call dictionary returns a list of Steam IDs.
 
-        lista_amigos = [amigo.get('steamid') for amigo in dic_amigos.get('friendslist').get('friends')]#[0:5]
+        friends_list = [amigo.get('steamid') for amigo in friends_dict.get('friendslist').get('friends')]#[0:5]
 
         performance = round((end_api_call - start_api_call),2)
         
-        retorno ={'amigos': lista_amigos,
+        req_return ={'amigos': friends_list,
                   'performance_steam': performance}
 
-        return retorno
+        return req_return
         
 
-    def solicitar_dados_amigos(self, amigo: str) -> Dict:
+    def player_data_request(self, player: str) -> Dict:
         '''
-        Recebe uma string com o ID_steam de um amigo, para que seja solicitado a API da steam os dados desse amigo, e o tempo de performance da solicitação como um dicionário de dicionários.
-        exemplo de retorno:
-            retorno = {
+        Receives a string containing a friend's Steam ID, so that the Steam API can be requested to retrieve that friend's data, and the request's performance time is measured as a dictionary of dictionaries.
+        Example return:
+            return = {
                         'dados':{
                             'steamid': str,
                             'personaname: str,
@@ -60,31 +62,33 @@ class SteamApiService:
                         'performance_steam': float    
                             }
         
-        tendo assim o retorno com duas keys, "dados" que é um dicionário contendo os dados do amigo, e "performance" que é um valor float mostrando o tempo da performance da requisição 
+        The result is a return with two keys: "dados," which is a dictionary containing the friend's data, and "performance," which is a float value showing the request's performance time.
 
-        para acessar os dados basta acessar a chave do dicionario.
-        ex:
+        To access the data, simply access the dictionary key.
+
+        Example:
 
         print(retorno['dados'])
 
         >>> {'steamid': '76561197975609491', 'personaname': 'nome', 'profilestate': 1, 'avatarfull': 'https://avatars.steamstatic.com/79a8119bd2a027755f93872d0d09b959909a0405_full.jpg'}
-
-
         '''
+
+
         start_api_call = perf_counter()
-        amigo = requests.get(f"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.steam_key}&steamids={amigo}").json().get('response').get('players')
+        player = requests.get(f"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.steam_key}&steamids={player}").json().get('response').get('players')
 
     
-        dados_amigos = {
-            'steamid': amigo[0].get('steamid'),
-            'personaname': amigo[0].get('personaname'),
-            'communityvisibilitystate': amigo[0].get('communityvisibilitystate'),
-            'avatarfull': amigo[0].get('avatarfull')
+        player_data = {
+            'steamid': player[0].get('steamid'),
+            'personaname': player[0].get('personaname'),
+            'communityvisibilitystate': player[0].get('communityvisibilitystate'),
+            'avatarfull': player[0].get('avatarfull')
         }
         
         end_api_call = perf_counter()
         performance = round((end_api_call - start_api_call),2)
-        return {'dados':dados_amigos,
+
+        return {'dados':player_data,
                 'performance_steam': performance}
 
             
@@ -92,10 +96,12 @@ class SteamApiService:
 
 
 if __name__ == '__main__':
-    ranking = "76561198266319437"
-    lista_amigos_raw= SteamApiService().listar_amigos_raw(id_ranking=ranking)
-    lista_amigos_dados = lista_amigos_raw['amigos']
-    print(lista_amigos_dados)
+
+    ranking_id = os.getenv('RANKING_STEAM')
+    ranking = ranking_id
+    raw_friend_list= SteamApiService().raw_friend_list(id_ranking=ranking)
+    friend_list = raw_friend_list['amigos']
+    print(friend_list)
 
 
  
