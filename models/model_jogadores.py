@@ -2,7 +2,7 @@ from peewee import Model, CharField, SmallIntegerField, IntegrityError
 from models.db import DbDota, db_dota 
 
 
-class Jogadores(DbDota):
+class Player(DbDota):
     steam_id = CharField(primary_key=True)
     personaname = CharField()
     profilestate= SmallIntegerField()
@@ -31,7 +31,7 @@ class Jogadores(DbDota):
         else: pass
 
         try:
-            Jogadores.create(
+            Player.create(
                             steam_id = steam_id,
                             personaname = personaname,
                             profilestate = profilestate,
@@ -41,11 +41,11 @@ class Jogadores(DbDota):
             
     
         except IntegrityError:  # Ocorre se o steam_id já existe no banco
-            Jogadores.update(
+            Player.update(
             personaname=personaname,
             profilestate=profilestate,
             avatar=avatar
-            ).where(Jogadores.steam_id == steam_id).execute()
+            ).where(Player.steam_id == steam_id).execute()
 
         if not db_dota.is_closed():
             db_dota.close()
@@ -55,13 +55,13 @@ if __name__ == "__main__":
     
     db_dota.connect
 
-    Jogadores().adicionar_jogador(steam_id=123, personaname='testee', profilestate=3, avatar='teste.jpg')
+    Player().adicionar_jogador(steam_id=123, personaname='testee', profilestate=3, avatar='teste.jpg')
 
-    consulta = Jogadores.select().where(Jogadores.steam_id == 123)
+    consulta = Player.select().where(Player.steam_id == 123)
 
     for jogadores in consulta:
         print(jogadores)
 
-    Jogadores().delete().where(Jogadores.steam_id == 123)
+    Player().delete().where(Player.steam_id == 123)
 
     db_dota.close()
