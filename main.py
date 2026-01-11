@@ -14,7 +14,7 @@ load_dotenv()
 db_dota.create_tables([Player, Sessao, Tiers, TierHistory])
 
 # Populate Tiers in the Bd if doesn't exists
-Tiers.popular_tabela_tiers()
+Tiers.pupulate_tier_table()
 
 #creating session in bd.sessao
 sessao = Sessao.gerar_nova_sessao()

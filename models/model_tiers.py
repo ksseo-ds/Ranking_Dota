@@ -12,7 +12,7 @@ class Tiers(DbDota):
 
 
     @classmethod
-    def popular_tabela_tiers(cls):
+    def pupulate_tier_table(cls):
 
         if db_dota.is_closed():
             db_dota.connect()
@@ -72,16 +72,16 @@ class Tiers(DbDota):
                         tier_name=tupla[1],
                         tier_star=tupla[2]
                     )
-                    print(f'Criado: {tupla}')
+                    print(f'Created: {tupla}')
                 else:
-                    print(f'Atualizado: {tupla}')
+                    print(f'Updated: {tupla}')
 
             except Exception as e:
-                print(f'Erro ao processar {tupla}: {e}')
+                print(f'Processing Error  {tupla}: {e}')
 
         if not db_dota.is_closed():
             db_dota.close()
-            print('Models/tiers desconectando do bd')
+            print('Models/tiers Db Disconnecting')
 
 
 if __name__ == "__main__":
@@ -90,7 +90,7 @@ if __name__ == "__main__":
  
 
     db_dota.create_tables([Tiers], safe = True)
-    Tiers.popular_tabela_tiers()
+    Tiers.pupulate_tier_table()
 
   
 
