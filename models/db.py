@@ -1,5 +1,5 @@
 import os
-from peewee import *
+from peewee import PostgresqlDatabase
 from dotenv import load_dotenv
 
 load_dotenv()
