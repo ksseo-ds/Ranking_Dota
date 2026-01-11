@@ -1,4 +1,4 @@
-from peewee import *
+from peewee import Model, ForeignKeyField
 from models.db import db_dota
 from models.model_jogadores import Jogadores
 from models.model_sessao import Sessao

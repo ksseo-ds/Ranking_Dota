@@ -1,4 +1,4 @@
-from peewee import *
+from peewee import Model, DateTimeField
 from models.db import db_dota 
 from datetime import datetime
 

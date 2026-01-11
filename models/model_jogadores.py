@@ -1,4 +1,4 @@
-from peewee import *
+from peewee import Model, CharField, SmallIntegerField, IntegrityError
 from models.db import db_dota 
 
 
