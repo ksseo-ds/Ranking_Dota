@@ -1,11 +1,11 @@
 import os
 from dotenv import load_dotenv
 from models.db import db_dota
-from models.model_jogadores import Player
+from models.model_player import Player
 from models.model_tiers import Tiers
-from models.model_sessao import Sessao
+from models.model_session import Sessao
 from models.model_tiers_history import TierHistory
-from models.model_open_dota_billing import Open_dota_billing
+from models.model_open_dota_billing import OpenDotaBilling
 from services.jogador_service import construir_jogador
 from services.steam_api_service import SteamApiService 
 
@@ -49,7 +49,7 @@ for id_jogador in lista_de_jogadores:
     TierHistory.incluir_tier_bd(jogador=jogador['dados'])
 
     #CRUD Billing
-    Open_dota_billing.open_dota_bill(session_id=sessao,requisition_billing=open_dota_billing)
+    OpenDotaBilling.open_dota_bill(session_id=sessao,requisition_billing=open_dota_billing)
 
     
 '''

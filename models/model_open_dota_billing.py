@@ -1,9 +1,9 @@
 from peewee import Model, IntegerField,ForeignKeyField
-from models.model_sessao import Sessao
+from models.model_session import Sessao
 from models.db import DbDota, db_dota
 
 
-class Open_dota_billing(DbDota):
+class OpenDotaBilling(DbDota):
     session_id = ForeignKeyField(Sessao, backref='sessao', on_delete='CASCADE' )
     requisition_billing = IntegerField()
     
@@ -13,13 +13,13 @@ class Open_dota_billing(DbDota):
     @classmethod
     def open_dota_bill(cls, session_id:int, requisition_billing:int) -> None:
         db_dota.connect()
-        Open_dota_billing.create(session_id=session_id, requisition_billing=requisition_billing)
+        OpenDotaBilling.create(session_id=session_id, requisition_billing=requisition_billing)
         db_dota.close()
 
 if __name__ == "__main__":
-    from models.model_sessao import Sessao    
+    from models.model_session import Sessao    
 
-    db_dota.create_tables([Open_dota_billing], safe = True)
+    db_dota.create_tables([OpenDotaBilling], safe = True)
     
     try:
         db_dota.close()
@@ -27,6 +27,6 @@ if __name__ == "__main__":
         pass
     session = Sessao.gerar_nova_sessao()
     requisition_billing = 1
-    Open_dota_billing.open_dota_bill(session_id=session, requisition_billing=requisition_billing)
+    OpenDotaBilling.open_dota_bill(session_id=session, requisition_billing=requisition_billing)
 
     db_dota.close()
