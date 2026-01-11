@@ -1,12 +1,9 @@
 from peewee import Model, IntegerField,ForeignKeyField
 from models.model_sessao import Sessao
-from models.db import db_dota
+from models.db import DbDota, db_dota
 
-class Banco(Model):
-    class Meta:
-        database = db_dota 
 
-class Open_dota_billing(Banco):
+class Open_dota_billing(DbDota):
     session_id = ForeignKeyField(Sessao, backref='sessao', on_delete='CASCADE' )
     requisition_billing = IntegerField()
     

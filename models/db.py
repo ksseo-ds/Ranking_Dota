@@ -11,12 +11,12 @@ db_host = os.getenv("DB_HOST")
 db_port = os.getenv("DB_PORT") 
 
 
-db_data = PostgresqlDatabase(db_name,
+db_dota = PostgresqlDatabase(db_name,
                             user = db_user, 
                             password = db_pass,
                             host=db_host,
                             port=db_port )
 
-class Db_dota(Model):
+class DbDota(Model):
     class Meta:
-        database = db_data
+        database = db_dota

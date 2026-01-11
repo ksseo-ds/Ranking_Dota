@@ -1,13 +1,9 @@
 from peewee import Model, DateTimeField
-from models.db import db_dota 
+from models.db import DbDota, db_dota 
 from datetime import datetime
 
 
-class Banco(Model):
-    class Meta:
-        database = db_dota 
-
-class Sessao(Banco):
+class Sessao(DbDota):
     date = DateTimeField()
     
     class Meta:

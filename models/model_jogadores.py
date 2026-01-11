@@ -1,12 +1,8 @@
 from peewee import Model, CharField, SmallIntegerField, IntegrityError
-from models.db import db_dota 
+from models.db import DbDota, db_dota 
 
 
-class Banco(Model):
-    class Meta:
-        database = db_dota 
-
-class Jogadores(Banco):
+class Jogadores(DbDota):
     steam_id = CharField(primary_key=True)
     personaname = CharField()
     profilestate= SmallIntegerField()

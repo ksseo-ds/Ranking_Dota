@@ -1,14 +1,8 @@
 from peewee import Model, SmallIntegerField, CharField
-from models.db import db_dota 
+from models.db import DbDota, db_dota 
 
 
-
-
-class Banco(Model):
-    class Meta:
-        database = db_dota
-
-class Tiers(Banco):
+class Tiers(DbDota):
     tier = SmallIntegerField(unique=True, primary_key= True)
     tier_name = CharField()
     tier_star = SmallIntegerField()
