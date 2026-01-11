@@ -1,4 +1,4 @@
-from peewee import Model, CharField, SmallIntegerField, IntegrityError
+from peewee import CharField, SmallIntegerField, IntegrityError
 from models.db import DbDota, db_dota 
 
 
@@ -15,14 +15,17 @@ class Player(DbDota):
         return self.personaname
 
     @classmethod
-    def adicionar_jogador(cls, steam_id, personaname, profilestate, avatar):
+    def create_update_player(cls, steam_id, personaname, profilestate, avatar):
         '''
-        Sub_rotina que adiciona ou atualiza jogadores no banco de dados, a partir do 'comando adicionar_a_ BD'.
+        Subroutine that adds or updates players in the database
 
-        a diferença é que o comando 'adicionar_ao_BD' recebe uma lista de dicionários com os dados de jogadores, e após verificação se o jogador existe
-        ou não é feita uma iteração em cada jogador e 'adicionar_jogador()' é executado no jogador.
+        params:
+            steam_id : int
+            personaname : str
+            profilestate : int
+            avatar : str
 
-        o retorno é o usuário e ja atualiza no BD
+        The return is the user and it updates the database.
         '''    
 
         if db_dota.is_closed():
@@ -40,7 +43,7 @@ class Player(DbDota):
         
             
     
-        except IntegrityError:  # Ocorre se o steam_id já existe no banco
+        except IntegrityError:  # If this happen it means that the player is persisted Already, it will update instead 
             Player.update(
             personaname=personaname,
             profilestate=profilestate,
@@ -55,7 +58,7 @@ if __name__ == "__main__":
     
     db_dota.connect
 
-    Player().adicionar_jogador(steam_id=123, personaname='testee', profilestate=3, avatar='teste.jpg')
+    Player().create_update_player(steam_id=123, personaname='testee', profilestate=3, avatar='teste.jpg')
 
     consulta = Player.select().where(Player.steam_id == 123)
 

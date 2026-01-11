@@ -39,7 +39,7 @@ for id_jogador in lista_de_jogadores:
     print(jogador['dados'])
 
     #CRUD player 
-    Player.adicionar_jogador(steam_id=steam_id,
+    Player.create_update_player(steam_id=steam_id,
                                 personaname=personaname,
                                 profilestate=profilestate,
                                 avatar=avatar
