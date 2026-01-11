@@ -4,14 +4,14 @@ from models.db import db_dota
 from models.model_jogadores import Player
 from models.model_tiers import Tiers
 from models.model_sessao import Sessao
-from models.model_historico_tiers import Historico_tier
+from models.model_tiers_history import TierHistory
 from models.model_open_dota_billing import Open_dota_billing
 from services.jogador_service import construir_jogador
 from services.steam_api_service import SteamApiService 
 
 load_dotenv()
 # Bd table creations if doesn't exsixt
-db_dota.create_tables([Player, Sessao, Tiers, Historico_tier])
+db_dota.create_tables([Player, Sessao, Tiers, TierHistory])
 
 # Populate Tiers in the Bd if doesn't exists
 Tiers.popular_tabela_tiers()
@@ -46,7 +46,7 @@ for id_jogador in lista_de_jogadores:
                                 )
     print('atualizado')
     #CRUD Tier of the player
-    Historico_tier.incluir_tier_bd(jogador=jogador['dados'])
+    TierHistory.incluir_tier_bd(jogador=jogador['dados'])
 
     #CRUD Billing
     Open_dota_billing.open_dota_bill(session_id=sessao,requisition_billing=open_dota_billing)

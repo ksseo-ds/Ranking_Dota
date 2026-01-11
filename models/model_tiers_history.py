@@ -1,11 +1,11 @@
-from peewee import Model, ForeignKeyField
+from peewee import ForeignKeyField
 from models.db import DbDota,db_dota
 from models.model_jogadores import Player
 from models.model_sessao import Sessao
 from models.model_tiers import Tiers
 
 
-class Historico_tier(DbDota):
+class TierHistory(DbDota):
     steam_id = ForeignKeyField(Player, backref='historico', on_delete='CASCADE')
     tier = ForeignKeyField(Tiers, backref='tier', on_delete='CASCADE')
     sessao = ForeignKeyField(Sessao, backref='sessao', on_delete='CASCADE')
@@ -24,7 +24,7 @@ class Historico_tier(DbDota):
 
         if jogador.get('tier') is not None:
 
-            Historico_tier().create(
+            TierHistory().create(
                 tier = jogador['tier'],
                 steam_id = jogador['steamid'],
                 sessao = jogador['sessao']
