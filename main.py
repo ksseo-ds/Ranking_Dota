@@ -1,3 +1,4 @@
+import os
 from dotenv import load_dotenv
 from models.db import db_dota
 from models.model_jogadores import Jogadores
@@ -8,7 +9,7 @@ from models.model_open_dota_billing import Open_dota_billing
 from services.jogador_service import construir_jogador
 from services.steam_api_service import SteamApiService 
 
-
+load_dotenv()
 # Bd table creations if doesn't exsixt
 db_dota.create_tables([Jogadores, Sessao, Tiers, Historico_tier])
 
@@ -19,8 +20,7 @@ Tiers.popular_tabela_tiers()
 sessao = Sessao.gerar_nova_sessao()
 
 #the steam_id of the target to rank its friends
-ranking = '76561198266319437'
-
+ranking = os.getenv('RANKING_STEAM') 
 # creating the friends list of the target 
 lista_de_jogadores = SteamApiService().listar_amigos_raw(id_ranking=ranking)['amigos']
 
